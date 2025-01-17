@@ -1,0 +1,23 @@
+{
+  "name": "electron-ws-confitec-desafio",
+  "version": "1.0.0",
+  "description": "Um site em electron com a biblioteca de websocket ws para enviar mensagens para um app em react-native e salvadas em um banco de dados SQLite",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/femacedogomes/electron-ws-confitec-desafio.git"
+  },
+  "author": "Felipe Macedo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/femacedogomes/electron-ws-confitec-desafio/issues"
+  },
+  "homepage": "https://github.com/femacedogomes/electron-ws-confitec-desafio#readme",
+  "devDependencies": {
+    "electron": "^34.0.0"
+  }
+}
