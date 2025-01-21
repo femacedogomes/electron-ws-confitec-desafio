@@ -9,10 +9,10 @@ body {
   margin: 0;
   min-height: 100%;
   display: flex;
-  flex-direction: column; /* Garante que o conteúdo seja empilhado verticalmente */
+  flex-direction: column;
   padding: 20px;
   background-color: #f4f4f9;
-  box-sizing: border-box; /* Inclui padding no cálculo do tamanho total */
+  box-sizing: border-box;
 }
 
 h1 {
@@ -20,31 +20,31 @@ h1 {
 }
 
 #messages {
-  flex-grow: 1; /* Faz o elemento crescer para ocupar o espaço disponível */
+  flex-grow: 1;
   margin-bottom: 10px;
   padding: 10px;
   font-family: monospace;
   font-size: 14px;
   border-radius: 4px;
-  overflow-y: auto; /* Permite rolagem caso o conteúdo exceda o tamanho vertical */
-  overflow-x: hidden; /* Impede que o conteúdo exceda o tamanho horizontal */
+  overflow-y: auto;
+  overflow-x: hidden; 
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 100%; /* Garante que o elemento não ultrapasse o tamanho do body */
-  box-sizing: border-box; /* Inclui padding no cálculo da largura */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #errorMessage {
   color: red;
   font-size: 14px;
   margin-top: 10px;
-  display: none; /* Inicialmente escondido */
-  text-align: center; /* Centraliza a mensagem */
-  background-color: #ffe5e5; /* Fundo vermelho claro */
-  padding: 10px; /* Espaçamento interno para melhor visibilidade */
-  border: 1px solid #ffcccc; /* Borda mais escura para destacar */
-  border-radius: 4px; /* Cantos arredondados */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para dar destaque */
+  display: none;
+  text-align: center;
+  background-color: #ffe5e5;
+  padding: 10px;
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #messageInput {

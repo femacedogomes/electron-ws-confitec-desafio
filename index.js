@@ -4,10 +4,8 @@ const WebSocket = require("ws");
 const Database = require("better-sqlite3");
 const path = require("path");
 
-// Inicializa o banco de dados SQLite
 const db = new Database(path.join(__dirname, "chat.db"));
 
-// Cria a tabela de mensagens, se não existir
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS messages (
@@ -31,12 +29,10 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow();
 
-  // Inicializa o servidor WebSocket
   const wss = new WebSocketServer({ port: 8080, clientTracking: true });
 
   wss.on("connection", (ws) => {
     console.log("Cliente conectado.");
-    // Envia mensagens antigas ao cliente recém-conectado
     const messages = db.prepare("SELECT * FROM messages").all() || [];
     ws.send(JSON.stringify({ type: "history", data: messages }));
 
@@ -52,7 +48,6 @@ app.whenReady().then(() => {
         );
 
         const insertedMessage = db.prepare("SELECT id, sender, message, timestamp FROM messages WHERE id = ?").get(result.lastInsertRowid)
-        // Reenvia a mensagem para todos os clientes conectados
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(
