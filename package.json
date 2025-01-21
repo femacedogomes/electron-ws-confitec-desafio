@@ -21,6 +21,7 @@
     "electron": "^34.0.0"
   },
   "dependencies": {
+    "better-sqlite3": "^11.8.1",
     "ws": "^8.18.0"
   }
 }
