@@ -11,33 +11,43 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Mensagens</h1>
+    <h1>Bate-Papo</h1>
+    <div id="connectionStatus" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px;">
+      <span style="margin-right: 8px; font-size: 14px; color: green;">conectado (Electron)</span>
+      <span style="width: 10px; height: 10px; background-color: green; border-radius: 50%;"></span>
+    </div>
     <textarea
       id="messages"
       readonly
       style="width: 100%; height: 300px"
-    ></textarea
-    ><br />
-    <input
-      type="text"
-      id="messageInput"
-      placeholder="Type a message"
-      style="width: 80%"
-    />
-    <button id="sendMessage">Send</button>
+    ></textarea>
+    <div class="inputContainer">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Digite uma mensagem"
+        style="width: 80%"
+      />
+      <button id="sendMessage">Send</button>
+    </div>
+    <div id="errorMessage"></div>
     <script>
       const ws = new WebSocket("ws://localhost:8080");
 
       const messagesBox = document.getElementById("messages");
       const messageInput = document.getElementById("messageInput");
       const sendButton = document.getElementById("sendMessage");
+      const errorMessage = document.getElementById("errorMessage");
+      const connectionStatus = document.getElementById("connectionStatus");
 
       ws.onerror = (error) => {
-        console.error("Erro no WebSocket:", error);
+        errorMessage.style.display = "block";
+        errorMessage.textContent = "Erro no WebSocket: Não foi possível conectar ao servidor.";
       };
 
       ws.onopen = function open() {
-        console.log("Electron conectado");
+        errorMessage.style.display = "none";
+        connectionStatus.style.display = "flex"; // Exibe o status de conexão
       };
 
       ws.onmessage = function message(event) {
@@ -48,13 +58,19 @@
           });
         }
         if (response.type === "message") {
-          const { sender, message } = response.data;
-          messagesBox.value += `${sender}: ${message}\n`;
+          const { sender, message, timestamp } = response.data;
+          messagesBox.value += `[${timestamp}] ${sender}: ${message}\n`;
         }
       };
 
       sendButton.addEventListener("click", () => {
         const message = messageInput.value;
+        if (!message) {
+          errorMessage.style.display = "block";
+          errorMessage.textContent = "Você precisa digitar algo para enviar.";
+          return;
+        }
+        errorMessage.style.display = "none";
         ws.send(
           JSON.stringify({ type: "message", sender: "Electron", message })
         );
