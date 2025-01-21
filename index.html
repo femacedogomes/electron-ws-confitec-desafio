@@ -9,18 +9,58 @@
     />
     <title>Serviço de mensagem com electron,ws e sqlite</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      #messages {
+        width: 100%;
+        height: 300px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #fff;
+      }
+      .message {
+        margin-bottom: 10px;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+      }
+      .message-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .message-header .sender {
+        font-weight: bold;
+      }
+      .message-text {
+        font-size: 14px;
+      }
+    </style>
   </head>
   <body>
     <h1>Bate-Papo</h1>
-    <div id="connectionStatus" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px;">
-      <span style="margin-right: 8px; font-size: 14px; color: green;">conectado (Electron)</span>
-      <span style="width: 10px; height: 10px; background-color: green; border-radius: 50%;"></span>
+    <div
+      id="connectionStatus"
+      style="
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 10px;
+      "
+    >
+      <span style="margin-right: 8px; font-size: 14px; color: green"
+        >conectado (Electron)</span
+      >
+      <span
+        style="
+          width: 10px;
+          height: 10px;
+          background-color: green;
+          border-radius: 50%;
+        "
+      ></span>
     </div>
-    <textarea
-      id="messages"
-      readonly
-      style="width: 100%; height: 300px"
-    ></textarea>
+    <div id="messages"></div>
     <div class="inputContainer">
       <input
         type="text"
@@ -30,7 +70,7 @@
       />
       <button id="sendMessage">Send</button>
     </div>
-    <div id="errorMessage"></div>
+    <div id="errorMessage" style="color: red; margin-top: 10px"></div>
     <script>
       const ws = new WebSocket("ws://localhost:8080");
 
@@ -40,9 +80,14 @@
       const errorMessage = document.getElementById("errorMessage");
       const connectionStatus = document.getElementById("connectionStatus");
 
+      const scrollToBottom = () => {
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+      };
+
       ws.onerror = (error) => {
         errorMessage.style.display = "block";
-        errorMessage.textContent = "Erro no WebSocket: Não foi possível conectar ao servidor.";
+        errorMessage.textContent =
+          "Erro no WebSocket: Não foi possível conectar ao servidor.";
       };
 
       ws.onopen = function open() {
@@ -54,12 +99,32 @@
         const response = JSON.parse(event.data);
         if (response.type === "history") {
           response.data.forEach((msg) => {
-            messagesBox.value += `[${msg.timestamp}] ${msg.sender}: ${msg.message}\n`;
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.innerHTML = `
+              <div class="message-header">
+                <span class="sender">${msg.sender}</span>
+                <span class="timestamp">${msg.timestamp}</span>
+              </div>
+              <div class="message-text">${msg.message}</div>
+            `;
+            messagesBox.appendChild(messageElement);
           });
+          scrollToBottom();
         }
         if (response.type === "message") {
           const { sender, message, timestamp } = response.data;
-          messagesBox.value += `[${timestamp}] ${sender}: ${message}\n`;
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("message");
+          messageElement.innerHTML = `
+            <div class="message-header">
+              <span class="sender">${sender}</span>
+              <span class="timestamp">${timestamp}</span>
+            </div>
+            <div class="message-text">${message}</div>
+          `;
+          messagesBox.appendChild(messageElement);
+          scrollToBottom();
         }
       };
 

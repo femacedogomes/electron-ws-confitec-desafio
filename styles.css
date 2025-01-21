@@ -73,3 +73,20 @@ h1 {
   align-items: center;
   gap: 10px;
 }
+.message {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.message-header .sender {
+  font-weight: bold;
+}
+.message-text {
+  font-size: 14px;
+}
