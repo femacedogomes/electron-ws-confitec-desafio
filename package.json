@@ -5,7 +5,23 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "test": "test"
+    "test": "test",
+    "build": "electron-builder"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "index.html",
+      "index.js",
+      "chat.db",
+      "styles.css"
+    ],
+    "mac": {
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "target": ["nsis"]
+    }
   },
   "repository": {
     "type": "git",
@@ -18,7 +34,8 @@
   },
   "homepage": "https://github.com/femacedogomes/electron-ws-confitec-desafio#readme",
   "devDependencies": {
-    "electron": "^34.0.0"
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",

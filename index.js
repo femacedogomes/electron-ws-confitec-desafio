@@ -1,10 +1,19 @@
 const { app, BrowserWindow } = require("electron");
 const { WebSocketServer } = require("ws");
 const WebSocket = require("ws");
+const fs = require("fs");
 const Database = require("better-sqlite3");
 const path = require("path");
 
-const db = new Database(path.join(__dirname, "chat.db"));
+const userDataPath = app.getPath("userData");
+const dbPath = path.join(userDataPath, "chat.db");
+
+if (!fs.existsSync(dbPath)) {
+  console.log("Banco de dados não encontrado. Criando novo arquivo...");
+  fs.copyFileSync(path.join(__dirname, "chat.db"), dbPath); // Copia de um banco inicial se necessário
+}
+
+const db = new Database(dbPath);
 
 db.prepare(
   `
