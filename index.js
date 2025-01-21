@@ -42,12 +42,15 @@ app.whenReady().then(() => {
       if (parsedData.type === "message") {
         const { sender, message } = parsedData;
 
-        const result = db.prepare("INSERT INTO messages (sender, message) VALUES (?, ?)").run(
-          sender,
-          message
-        );
+        const result = db
+          .prepare("INSERT INTO messages (sender, message) VALUES (?, ?)")
+          .run(sender, message);
 
-        const insertedMessage = db.prepare("SELECT id, sender, message, timestamp FROM messages WHERE id = ?").get(result.lastInsertRowid)
+        const insertedMessage = db
+          .prepare(
+            "SELECT id, sender, message, timestamp FROM messages WHERE id = ?"
+          )
+          .get(result.lastInsertRowid);
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(
