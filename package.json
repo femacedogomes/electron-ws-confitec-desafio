@@ -12,6 +12,7 @@
     "files": [
       "build/**/*",
       "index.html",
+      "script.js",
       "index.js",
       "chat.db",
       "styles.css"
